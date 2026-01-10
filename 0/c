@@ -1,0 +1,60 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+/*------------*\
+  13.10.2025
+  =========     
+  \\sofian/  
+   \\Sakr/ 
+    \\  /    
+     \\/     
+\*-----------*/
+
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      c;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    In
+    {
+        type            fixedValue;
+        value           uniform 0;  // Clean gas enters (no scalar)
+    }
+    
+    Out
+    {
+        type            zeroGradient;  // Scalar exits freely with flow
+    }
+    
+    Top
+    {
+        type            zeroGradient;  // No flux through wall
+    }
+    
+    Bottom
+    {
+        type            zeroGradient;  // No flux through wall
+    }
+    
+    DefaultFaces
+    {
+        type            empty;  // For 2D simulation
+    }
+}
+
+// ************************************************************************* //

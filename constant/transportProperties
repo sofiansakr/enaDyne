@@ -1,0 +1,26 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v10                                  |
+|   \\  /    A nd           | Website:  https://openfoam.org                  |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      transportProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Diffusion coefficient for passive scalar (m^2/s)
+// Typical values: 1e-5 for gases, 1e-9 for liquids
+Dc              Dc [0 2 -1 0 0 0 0] 1e-5;
+
+// Source injection rate in plasma regions (1/s)
+// Higher values = faster saturation in plasma zones
+Sc_mag          Sc_mag [0 0 -1 0 0 0 0] 10.0;
+
+// ************************************************************************* //

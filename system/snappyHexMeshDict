@@ -1,0 +1,221 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 0.001; // mm to m
+
+// Which of the steps to run
+castellatedMesh true;
+snap            false;  // No surface snapping needed for simple box refinement
+addLayers       false;  // No boundary layers (using volume refinement instead)
+
+// Write intermediate meshes
+writeLevel      0;
+
+// Geometry
+geometry
+{
+    // Define refinement boxes as searchable boxes
+    bottomBox
+    {
+        type searchableBox;
+        min (0 0 0);
+        max (50 4 1);
+    }
+    
+    topBox
+    {
+        type searchableBox;
+        min (0 11 0);
+        max (50 15 1);
+    }
+    
+    leftInletBox
+    {
+        type searchableBox;
+        min (0 0 0);
+        max (6 15 1);
+    }
+    
+    rightOutletBox
+    {
+        type searchableBox;
+        min (44 0 0);
+        max (50 15 1);
+    }
+    
+    // Corner regions - extra refinement at intersections
+    bottomLeftCorner
+    {
+        type searchableBox;
+        min (0 0 0);
+        max (6 4 1);
+    }
+    
+    bottomRightCorner
+    {
+        type searchableBox;
+        min (44 0 0);
+        max (50 4 1);
+    }
+    
+    topLeftCorner
+    {
+        type searchableBox;
+        min (0 11 0);
+        max (6 15 1);
+    }
+    
+    topRightCorner
+    {
+        type searchableBox;
+        min (44 11 0);
+        max (50 15 1);
+    }
+}
+
+// Settings for the castellatedMesh generation
+castellatedMeshControls
+{
+    maxLocalCells 1000000;
+    maxGlobalCells 2000000;
+    minRefinementCells 0;
+    nCellsBetweenLevels 3;
+    
+    // Features to refine
+    features ();
+    
+    // Refinement regions
+    refinementSurfaces
+    {
+        // No surfaces to snap to
+    }
+    
+    refinementRegions
+    {
+        // Bottom boundary layer - 2 levels of refinement (4x finer)
+        bottomBox
+        {
+            mode inside;
+            levels ((1E15 2));
+        }
+        
+        // Top boundary layer - 2 levels of refinement
+        topBox
+        {
+            mode inside;
+            levels ((1E15 2));
+        }
+        
+        // Left inlet region - 1 level of refinement (2x finer)
+        leftInletBox
+        {
+            mode inside;
+            levels ((1E15 1));
+        }
+        
+        // Right outlet region - 1 level of refinement
+        rightOutletBox
+        {
+            mode inside;
+            levels ((1E15 1));
+        }
+        
+        // Corner refinements - 3 levels total (8x finer)
+        bottomLeftCorner
+        {
+            mode inside;
+            levels ((1E15 3));
+        }
+        
+        bottomRightCorner
+        {
+            mode inside;
+            levels ((1E15 3));
+        }
+        
+        topLeftCorner
+        {
+            mode inside;
+            levels ((1E15 3));
+        }
+        
+        topRightCorner
+        {
+            mode inside;
+            levels ((1E15 3));
+        }
+    }
+    
+    resolveFeatureAngle 30;
+    
+    locationInMesh (25 7.5 0.5); // Point inside the mesh (center)
+    
+    allowFreeStandingZoneFaces true;
+}
+
+// Settings for the snapping
+snapControls
+{
+    nSmoothPatch 3;
+    tolerance 2.0;
+    nSolveIter 30;
+    nRelaxIter 5;
+}
+
+// Settings for the layer addition
+addLayersControls
+{
+    relativeSizes true;
+    layers {}
+    expansionRatio 1.0;
+    finalLayerThickness 0.3;
+    minThickness 0.1;
+    nGrow 0;
+    featureAngle 60;
+    nRelaxIter 3;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedianAxisAngle 90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter 50;
+}
+
+// Generic mesh quality settings
+meshQualityControls
+{
+    maxNonOrtho 65;
+    maxBoundarySkewness 20;
+    maxInternalSkewness 4;
+    maxConcave 80;
+    minVol 1e-13;
+    minTetQuality 1e-30;
+    minArea -1;
+    minTwist 0.02;
+    minDeterminant 0.001;
+    minFaceWeight 0.02;
+    minVolRatio 0.01;
+    minTriangleTwist -1;
+    nSmoothScale 4;
+    errorReduction 0.75;
+}
+
+// Advanced settings
+debug 0;
+mergeTolerance 1e-6;
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

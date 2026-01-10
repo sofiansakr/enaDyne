@@ -1,0 +1,50 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      tau_Top_P4_L;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 1 0 0 0 0];  // Time
+
+internalField   uniform 0;
+
+boundaryField
+{
+    In
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+    
+    Out
+    {
+        type            zeroGradient;
+    }
+    
+    Top
+    {
+        type            zeroGradient;
+    }
+    
+    Bottom
+    {
+        type            zeroGradient;
+    }
+    
+    DefaultFaces
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //

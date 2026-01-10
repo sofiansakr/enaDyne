@@ -1,0 +1,405 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 0.001; // Convert mm to m
+
+vertices
+(
+    // Bottom layer (y=0)
+    (0   0   0)    // 0
+    (4   0   0)    // 1
+    (46  0   0)    // 2
+    (50  0   0)    // 3
+    
+    // First fine mesh layer near bottom (y=0.3)
+    (0   0.3   0)    // 4
+    (4   0.3   0)    // 5
+    (46  0.3   0)    // 6
+    (50  0.3   0)    // 7
+    
+    // Second fine mesh layer near bottom (y=0.6)
+    (0   0.6   0)    // 8
+    (4   0.6   0)    // 9
+    (46  0.6   0)    // 10
+    (50  0.6   0)    // 11
+    
+    // Lower boundary layer (y=6)
+    (0   6   0)    // 12
+    (4   6   0)    // 13
+    (46  6   0)    // 14
+    (50  6   0)    // 15
+    
+    // Middle layer split (y=7.5)
+    (0   7.5 0)    // 16
+    (4   7.5 0)    // 17
+    (46  7.5 0)    // 18
+    (50  7.5 0)    // 19
+    
+    // Upper boundary layer (y=9)
+    (0   9  0)     // 20
+    (4   9  0)     // 21
+    (46  9  0)     // 22
+    (50  9  0)     // 23
+    
+    // Fine mesh layer near top (y=14.4)
+    (0   14.4  0)    // 24
+    (4   14.4  0)    // 25
+    (46  14.4  0)    // 26
+    (50  14.4  0)    // 27
+    
+    // First fine mesh layer near top (y=14.7)
+    (0   14.7  0)    // 28
+    (4   14.7  0)    // 29
+    (46  14.7  0)    // 30
+    (50  14.7  0)    // 31
+    
+    // Top layer (y=15)
+    (0   15  0)    // 32
+    (4   15  0)    // 33
+    (46  15  0)    // 34
+    (50  15  0)    // 35
+    
+    // Back face (z=1) - same x,y pattern
+    // Bottom layer (y=0, z=1)
+    (0   0   1)    // 36
+    (4   0   1)    // 37
+    (46  0   1)    // 38
+    (50  0   1)    // 39
+    
+    // First fine mesh layer near bottom (y=0.3, z=1)
+    (0   0.3   1)    // 40
+    (4   0.3   1)    // 41
+    (46  0.3   1)    // 42
+    (50  0.3   1)    // 43
+    
+    // Second fine mesh layer near bottom (y=0.6, z=1)
+    (0   0.6   1)    // 44
+    (4   0.6   1)    // 45
+    (46  0.6   1)    // 46
+    (50  0.6   1)    // 47
+    
+    // Lower boundary layer (y=6, z=1)
+    (0   6   1)    // 48
+    (4   6   1)    // 49
+    (46  6   1)    // 50
+    (50  6   1)    // 51
+    
+    // Middle layer split (y=7.5, z=1)
+    (0   7.5 1)    // 52
+    (4   7.5 1)    // 53
+    (46  7.5 1)    // 54
+    (50  7.5 1)    // 55
+    
+    // Upper boundary layer (y=9, z=1)
+    (0   9  1)     // 56
+    (4   9  1)     // 57
+    (46  9  1)     // 58
+    (50  9  1)     // 59
+    
+    // Fine mesh layer near top (y=14.4, z=1)
+    (0   14.4  1)    // 60
+    (4   14.4  1)    // 61
+    (46  14.4  1)    // 62
+    (50  14.4  1)    // 63
+    
+    // First fine mesh layer near top (y=14.7, z=1)
+    (0   14.7  1)    // 64
+    (4   14.7  1)    // 65
+    (46  14.7  1)    // 66
+    (50  14.7  1)    // 67
+    
+    // Top layer (y=15, z=1)
+    (0   15  1)    // 68
+    (4   15  1)    // 69
+    (46  15  1)    // 70
+    (50  15  1)    // 71
+);
+
+blocks
+(
+    // FIRST VERY FINE LAYER NEAR BOTTOM WALL (y: 0-0.3mm) - Extra fine cells
+    // Left corner
+    hex (0 1 5 4 36 37 41 40) (40 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Bottom middle
+    hex (1 2 6 5 37 38 42 41) (240 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Right corner
+    hex (2 3 7 6 38 39 43 42) (40 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // SECOND VERY FINE LAYER NEAR BOTTOM WALL (y: 0.3-0.6mm) - Extra fine cells
+    // Left corner
+    hex (4 5 9 8 40 41 45 44) (40 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Bottom middle
+    hex (5 6 10 9 41 42 46 45) (240 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Right corner
+    hex (6 7 11 10 42 43 47 46) (40 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // BOTTOM BOUNDARY LAYER (y: 0.6-6mm) - Fine cells
+    // Left corner
+    hex (8 9 13 12 44 45 49 48) (40 35 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Bottom middle
+    hex (9 10 14 13 45 46 50 49) (240 35 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Right corner
+    hex (10 11 15 14 46 47 51 50) (40 35 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // LOWER MIDDLE LAYER (y: 6-7.5mm) - Fine at bottom, coarse toward middle
+    // Left boundary
+    hex (12 13 17 16 48 49 53 52) (40 15 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 2 2 2 2        // y-direction edges (moderate expansion ratio)
+                 1 1 1 1)       // z-direction edges
+    
+    // Center region
+    hex (13 14 18 17 49 50 54 53) (240 15 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 2 2 2 2        // y-direction edges (moderate expansion ratio)
+                 1 1 1 1)       // z-direction edges
+    
+    // Right boundary
+    hex (14 15 19 18 50 51 55 54) (40 15 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 2 2 2 2        // y-direction edges (moderate expansion ratio)
+                 1 1 1 1)       // z-direction edges
+    
+    // UPPER MIDDLE LAYER (y: 7.5-9mm) - Coarse at bottom, fine toward top
+    // Left boundary
+    hex (16 17 21 20 52 53 57 56) (40 15 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 0.5 0.5 0.5 0.5  // y-direction edges (moderate inverse expansion)
+                 1 1 1 1)       // z-direction edges
+    
+    // Center region
+    hex (17 18 22 21 53 54 58 57) (240 15 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 0.5 0.5 0.5 0.5  // y-direction edges (moderate inverse expansion)
+                 1 1 1 1)       // z-direction edges
+    
+    // Right boundary
+    hex (18 19 23 22 54 55 59 58) (40 15 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 0.5 0.5 0.5 0.5  // y-direction edges (moderate inverse expansion)
+                 1 1 1 1)       // z-direction edges
+    
+    // TOP BOUNDARY LAYER (y: 9-14.4mm) - Fine cells
+    // Left corner
+    hex (20 21 25 24 56 57 61 60) (40 35 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Top middle
+    hex (21 22 26 25 57 58 62 61) (240 35 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Right corner
+    hex (22 23 27 26 58 59 63 62) (40 35 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // FIRST VERY FINE LAYER NEAR TOP WALL (y: 14.4-14.7mm) - Extra fine cells
+    // Left corner
+    hex (24 25 29 28 60 61 65 64) (40 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Top middle
+    hex (25 26 30 29 61 62 66 65) (240 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Right corner
+    hex (26 27 31 30 62 63 67 66) (40 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // SECOND VERY FINE LAYER NEAR TOP WALL (y: 14.7-15mm) - Extra fine cells
+    // Left corner
+    hex (28 29 33 32 64 65 69 68) (40 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Top middle
+    hex (29 30 34 33 65 66 70 69) (240 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+    
+    // Right corner
+    hex (30 31 35 34 66 67 71 70) (40 10 1) 
+    edgeGrading (1 1 1 1        // x-direction edges
+                 1 1 1 1        // y-direction edges
+                 1 1 1 1)       // z-direction edges
+);
+
+edges
+(
+);
+
+boundary
+(
+    In
+    {
+        type patch;
+        faces
+        (
+            (0 36 40 4)
+            (4 40 44 8)
+            (8 44 48 12)
+            (12 48 52 16)
+            (16 52 56 20)
+            (20 56 60 24)
+            (24 60 64 28)
+            (28 64 68 32)
+        );
+    }
+    
+    Out
+    {
+        type patch;
+        faces
+        (
+            (3 7 43 39)
+            (7 11 47 43)
+            (11 15 51 47)
+            (15 19 55 51)
+            (19 23 59 55)
+            (23 27 63 59)
+            (27 31 67 63)
+            (31 35 71 67)
+        );
+    }
+    
+    Bottom
+    {
+        type wall;
+        faces
+        (
+            (0 1 37 36)
+            (1 2 38 37)
+            (2 3 39 38)
+        );
+    }
+    
+    Top
+    {
+        type wall;
+        faces
+        (
+            (32 68 69 33)
+            (33 69 70 34)
+            (34 70 71 35)
+        );
+    }
+    
+    DefaultFaces
+    {
+        type empty;
+        faces
+        (
+            // Front (z=0)
+            (0 1 5 4)
+            (1 2 6 5)
+            (2 3 7 6)
+            (4 5 9 8)
+            (5 6 10 9)
+            (6 7 11 10)
+            (8 9 13 12)
+            (9 10 14 13)
+            (10 11 15 14)
+            (12 13 17 16)
+            (13 14 18 17)
+            (14 15 19 18)
+            (16 17 21 20)
+            (17 18 22 21)
+            (18 19 23 22)
+            (20 21 25 24)
+            (21 22 26 25)
+            (22 23 27 26)
+            (24 25 29 28)
+            (25 26 30 29)
+            (26 27 31 30)
+            (28 29 33 32)
+            (29 30 34 33)
+            (30 31 35 34)
+            
+            // Back (z=1)
+            (36 40 41 37)
+            (37 41 42 38)
+            (38 42 43 39)
+            (40 44 45 41)
+            (41 45 46 42)
+            (42 46 47 43)
+            (44 48 49 45)
+            (45 49 50 46)
+            (46 50 51 47)
+            (48 52 53 49)
+            (49 53 54 50)
+            (50 54 55 51)
+            (52 56 57 53)
+            (53 57 58 54)
+            (54 58 59 55)
+            (56 60 61 57)
+            (57 61 62 58)
+            (58 62 63 59)
+            (60 64 65 61)
+            (61 65 66 62)
+            (62 66 67 63)
+            (64 68 69 65)
+            (65 69 70 66)
+            (66 70 71 67)
+        );
+    }
+);
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

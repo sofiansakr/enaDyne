@@ -1,0 +1,109 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     icoFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         5.0e0;
+
+deltaT          5e-6;
+
+adjustTimeStep  yes;
+
+maxCo           0.08;
+
+maxDeltaT       5e-6; 
+
+writeControl    timeStep;
+
+writeInterval   1000000;  // Large number to prevent regular writes
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+functions
+{
+    logarithmicWrite
+    {
+        type  coded;
+        libs  ("libutilityFunctionObjects.so");
+        name  logarithmicWrite;
+
+        // Run our logic every time-step
+        executeControl  timeStep;
+        executeInterval 1;
+
+        codeExecute
+        #{
+            const scalar currentTime  = mesh().time().value();
+            const scalar deltaT       = mesh().time().deltaTValue();
+            const scalar previousTime = currentTime - deltaT;
+            const scalar tol          = 1e-12;
+            bool shouldWrite = false;
+
+            auto timeWasCrossed = [&](scalar targetTime) -> bool
+            {
+                // robust against roundoff and exact hits at restart
+                return (previousTime < targetTime - tol) && (currentTime >= targetTime - tol);
+            };
+		List<scalar> targetTimes;
+		for (scalar i = 1.0; i <= 9.0 + SMALL; i += 6.0) targetTimes.append(i * 1e-6);
+		for (scalar i = 1.0; i <= 9.0 + SMALL; i += 6.0) targetTimes.append(i * 1e-5);
+		for (scalar i = 1.0; i <= 9.0 + SMALL; i += 6.0) targetTimes.append(i * 1e-4);
+		for (scalar i = 1.0; i <= 9.0 + SMALL; i += 6.0) targetTimes.append(i * 1e-3);
+		for (scalar i = 1.0; i <= 9.0 + SMALL; i += 0.2) targetTimes.append(i * 1e-2);
+		for (scalar i = 1.0; i <= 9.0 + SMALL; i += 0.1) targetTimes.append(i * 1e-1);
+		for (scalar i = 1.0; i <= 9.0 + SMALL; i += 0.1) targetTimes.append(i * 1e0);
+		for (scalar i = 1.0; i <= 9.0 + SMALL; i += 0.1) targetTimes.append(i * 1e1);
+
+	    forAll(targetTimes, timeI)
+            {
+                const scalar t = targetTimes[timeI];
+                if (timeWasCrossed(t))
+                {
+                    shouldWrite = true;
+                    Info<< "Crossed logarithmic time: " << t
+                        << " (actual: " << currentTime
+                        << ", deltaT: " << deltaT << ")" << nl;
+                    break;
+                }
+            }
+
+            if (shouldWrite)
+            {
+                const_cast<Time&>(mesh().time()).writeNow();
+            }
+        #};
+    }
+}
+
+// ************************************************************************* //

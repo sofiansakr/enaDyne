@@ -1,0 +1,156 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+    // FIRST: Define cell sets for TOP and BOTTOM refinement (full width)
+    
+    // Bottom wall refinement (0-4 mm from bottom, full width)
+    {
+        name    c2;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (0 0 0) (0.050 0.004 0.001);  // In meters
+        }
+    }
+    
+    // Top wall refinement (11-15 mm from bottom, full width)
+    {
+        name    c3;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (0 0.011 0) (0.050 0.015 0.001);  // In meters
+        }
+    }
+    
+    // SECOND: Define INLET and OUTLET refinement only in middle region (4-11 mm height)
+    
+    // Inlet refinement region (0-4 mm from inlet, middle height only)
+    {
+        name    c0;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (0 0.004 0) (0.004 0.011 0.001);  // Only middle region
+        }
+    }
+    
+    // Outlet refinement region (46-50 mm from inlet, middle height only)
+    {
+        name    c1;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (0.046 0.004 0) (0.050 0.011 0.001);  // Only middle region
+        }
+    }
+    
+    // Combine all refinement regions for first level
+    {
+        name    c0;
+        type    cellSet;
+        action  add;
+        source  cellToCell;
+        sourceInfo
+        {
+            set c1;
+        }
+    }
+    
+    {
+        name    c0;
+        type    cellSet;
+        action  add;
+        source  cellToCell;
+        sourceInfo
+        {
+            set c2;
+        }
+    }
+    
+    {
+        name    c0;
+        type    cellSet;
+        action  add;
+        source  cellToCell;
+        sourceInfo
+        {
+            set c3;
+        }
+    }
+    
+    // Define second level refinement (2 mm from boundaries)
+    
+    // Bottom: 0-2 mm (full width)
+    {
+        name    c4;
+        type    cellSet;
+        action  new;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (0 0 0) (0.050 0.002 0.001);
+        }
+    }
+    
+    // Top: 13-15 mm (full width)
+    {
+        name    c4;
+        type    cellSet;
+        action  add;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (0 0.013 0) (0.050 0.015 0.001);
+        }
+    }
+    
+    // Inlet: 0-2 mm (middle region only)
+    {
+        name    c4;
+        type    cellSet;
+        action  add;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (0 0.002 0) (0.002 0.013 0.001);  // Adjusted to avoid overlap
+        }
+    }
+    
+    // Outlet: 48-50 mm (middle region only)
+    {
+        name    c4;
+        type    cellSet;
+        action  add;
+        source  boxToCell;
+        sourceInfo
+        {
+            box (0.048 0.002 0) (0.050 0.013 0.001);  // Adjusted to avoid overlap
+        }
+    }
+);
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
